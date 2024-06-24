@@ -23,6 +23,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUBTOKEN }}
 
+      - name: Debug: List files
+        run: ls -la
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
@@ -32,13 +35,15 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/my-app:${{ github.sha }}
 
       - name: Deploy to server (optional)
-        if: success()
+        if: always()
         env:
           IMAGE: ghcr.io/${{ github.repository_owner }}/my-app:${{ github.sha }}
-#        run: |
-#          ssh user@yourserver.com "
-#            docker pull $IMAGE &&
-#            docker stop my-app-container || true &&
-#            docker rm my-app-container || true &&
-#            docker run -d --name my-app-container -p 80:80 $IMAGE
-#          "
+        run: echo "Skipping deploy step for now"
+        # Uncomment and configure the lines below for actual deployment
+        # run: |
+        #   ssh user@yourserver.com "
+        #     docker pull $IMAGE &&
+        #     docker stop my-app-container || true &&
+        #     docker rm my-app-container || true &&
+        #     docker run -d --name my-app-container -p 80:80 $IMAGE
+        #   "
