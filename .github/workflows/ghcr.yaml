@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,8 +24,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUBTOKEN }}
 
-      - name: Debug: List files
-        run: ls -la
+      # Uncomment for debugging purposes
+      #      - name: Debug: List files
+      #        run: ls -la
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
